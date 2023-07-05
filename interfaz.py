@@ -2,7 +2,7 @@ import tkinter
 from time import *
 
 ventana = tkinter.Tk()
-fecha = tkinter.StringVar(ventana)
+hora_alarma = tkinter.StringVar(ventana)
 entrada = tkinter.StringVar(ventana)
 
 hora = strftime('%H')
@@ -11,14 +11,16 @@ segundo = strftime('%S')
 
 hora_total = (hora + ':' + minuto + ':' + segundo)
 
-ventana.geometry("400x700")
+ventana.geometry("500x700")
 ventana.configure(background = 'black')
 tkinter.Wm.wm_title(ventana, 'Alarma App')
 
 def on_click():
-    fecha.set("Configurada para: " + entrada.get())
+    datos_input = entrada.get()
+    hora_alarma.set("Configurada para: " + datos_input)
+    print(datos_input)
 
-fecha.set("Configurando... ")
+hora_alarma.set("Configurando... ")
 
 mensaje_inicial = tkinter.Label(
     text = "Alarma:",
@@ -32,19 +34,19 @@ mensaje_inicial = tkinter.Label(
 pantalla_hora = tkinter.Label(
     text = hora_total,
     font = ("Radioland", 30),
-    foreground = "red",
-    background = "white",
+    foreground = "green",
+    background = "black",
     width = 30,
     height = 2
 )
 
 mensaje_usuario = tkinter.Label(
-    textvariable = fecha,
+    textvariable = hora_alarma,
     font = ("Courier", 16),
-    foreground = "blue",
-    background = "yellow",
-    width = 30,
-    height = 2
+    foreground = "black",
+    background = "cyan",
+    width = 70,
+    height = 0
 )
 
 boton1 = tkinter.Button(
@@ -52,29 +54,40 @@ boton1 = tkinter.Button(
     font = ("Courier", 16),
     width = 0,
     height = 0,
-    bg = "blue",
-    fg = "yellow",
+    bg = "red",
+    fg = "white",
     command = on_click,
     relief = "flat"
 )
 
-cajon_alarma = tkinter.Entry(
-    fg = "white",
-    bg = "red",
+mensaje_alarma = tkinter.Label(
+    text = "Alarma:",
+    font = ("Black", 22),
+    foreground = "white",
+    background = "black",
+    width = 30,
+    height = 2
+)
+
+input_alarma = tkinter.Entry(
+    fg = "black",
+    bg = "white",
     font = ("Courier", 18),
-    width = 50,
+    width = 70,
     justify = "center",
     textvariable = entrada
 )
+
 
 # cajon_texto = tkinter.Text()
 
 def packear():
 
-    pantalla_hora.pack(fill=tkinter.BOTH, expand=True)
-    mensaje_inicial.pack(fill=tkinter.BOTH, expand=True)
-    cajon_alarma.pack(fill=tkinter.BOTH, expand=True)
-    mensaje_usuario.pack(fill=tkinter.BOTH, expand=True)
+    pantalla_hora.pack()
+    mensaje_inicial.pack()
+    mensaje_alarma()
+    input_alarma.pack()
+    mensaje_usuario.pack()
     boton1.pack()
     # cajon_texto.pack(fill=tkinter.BOTH, expand=True)
 
