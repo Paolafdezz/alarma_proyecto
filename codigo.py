@@ -1,27 +1,6 @@
 import time
 import pygame
 import threading
-import mysql.connector
-
-
-
-import mysql.connector
-
-sql_conect = mysql.connector.connect(
-    host='localhost',
-    port=3306,
-    user='root',
-    password='OjoCuidao',
-    database='alarma'
-)
-cur = sql_conect.cursor()
-cur.execute("SELECT id, hora FROM alarma")
-
-for id, hora in cur.fetchall():
-    print(id, hora)
-
-cur.close()
-sql_conect.close()
 
 
 class Alarma:
@@ -80,8 +59,6 @@ class Alarma:
 
                 time.sleep(1)
 
-                
-                
 
 def configurar_alarma():
     hora_alarma = input("Ingrese la hora de la alarma (formato HH:MM): ")
@@ -89,13 +66,16 @@ def configurar_alarma():
     alarma.iniciar_alarma()
 
 
-num_alarmas = int(input("Ingrese el número de alarmas que desea configurar: "))
+def demo():
+    num_alarmas = int(input("Ingrese el número de alarmas que desea configurar: "))
+    threads = []
+    for _ in range(num_alarmas):
+        t = threading.Thread(target=configurar_alarma)
+        t.start()
+        threads.append(t)
 
-threads = []
-for _ in range(num_alarmas):
-    t = threading.Thread(target=configurar_alarma)
-    t.start()
-    threads.append(t)
+    for thread in threads:
+        thread.join()
 
-for thread in threads:
-    thread.join()
+if __name__ == "__main__":
+    demo()
