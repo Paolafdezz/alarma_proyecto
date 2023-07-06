@@ -1,5 +1,7 @@
+from threading import Thread
 import tkinter
 from time import *
+
 
 BASE_COLOR = "azure2"
 
@@ -14,11 +16,12 @@ class Interfaz:
         self.hora_alarma = tkinter.StringVar(self.ventana)
         self.entrada_hora = tkinter.StringVar(self.ventana)
         self.entrada_nombre = tkinter.StringVar(self.ventana)
-
-        self.actualizar_hora()
-
         self.createIfnterace()
         self.packear()
+        self.actualizar_hora()
+        self.new_thread = Thread(target=self.task)
+        self.new_thread.start()
+
         self.ventana.mainloop()
 
     def createIfnterace(self):
@@ -163,6 +166,11 @@ class Interfaz:
             + "configurada para: "
             + datos_input_hora
         )
+
+    def task(self):
+        while True:
+            sleep(1)
+            self.actualizar_hora()
 
     def actualizar_hora(self):
         def obtener_hora_actual():
