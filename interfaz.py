@@ -1,167 +1,131 @@
 import tkinter
 from time import *
 
-ventana = tkinter.Tk()
-hora_alarma = tkinter.StringVar(ventana)
-entrada_hora = tkinter.StringVar(ventana)
-entrada_nombre = tkinter.StringVar(ventana)
-
-hora = strftime('%H')
-minuto = strftime('%M')
-segundo = strftime('%S')
-
-hora_total = (hora + ':' + minuto + ':' + segundo)
-
-ventana.geometry("500x700")
-ventana.configure(background = 'black')
-tkinter.Wm.wm_title(ventana, 'Alarma App')
-
-def on_click():
-    datos_input_hora = entrada_hora.get()
-    datos_input_nombre = entrada_nombre.get()
-    hora_alarma.set("Alarma: " + datos_input_nombre + "\n" + "configurada para: " + datos_input_hora)
-
-hora_alarma.set("Configurando... ")
-
-def choice(option):
-   pop.destroy()
-   if option == "yes":
-      tkinter.Label.config(text="Hello, How are You?")
-   else:
-      tkinter.Label.config(text="You have selected No")
-      ventana.destroy()
-
-def click_fun():
-   global pop
-   pop = tkinter.Toplevel(ventana)
-   pop.title("Confirmation")
-   pop.geometry("300x150")
-   pop.config(bg="white")
-   # Create a Label Text
-   label = tkinter.Label(pop, text="Seguro que quieres borrar la alarma?",
-   font=('Aerial', 12))
-   label.pack(pady=20)
-   frame = tkinter.Frame(pop, bg="gray71")
-   frame.pack(pady=10)
-   button1 = tkinter.Button(frame, text="Yes", command=lambda: choice("yes"), bg="blue", fg="white")
-   button1.grid(row=0, column=1)
-   button2 = tkinter.Button(frame, text="No", command=lambda: choice("no"), bg="blue", fg="white")
-   button2.grid(row=0, column=2)
-   label = tkinter.Label(ventana, text="", font=('Aerial', 14))
-   label.pack(pady=40)
+class Interfaz:
+    def __init__(self):
+        self.ventana = tkinter.Tk()
+        self.hora_alarma = tkinter.StringVar(self.ventana)
+        self.entrada_hora = tkinter.StringVar(self.ventana)
+        self.entrada_nombre = tkinter.StringVar(self.ventana)
+        self.mensaje_inicial = tkinter.Label(text="ALARMA", font=("Black", 40), foreground="white", background="black", width=30, height=1)
+        self.hora_total = self.obtener_hora_actual()
+        
+        self.ventana.geometry("500x700")
+        self.ventana.configure(background = 'black')
+        tkinter.Wm.wm_title(self.ventana, 'Alarma App')
 
 
-mensaje_inicial = tkinter.Label(
-    text = "ALARMA",
-    font = ("Black", 40),
-    foreground = "white",
-    background = "black",
-    width = 30,
-    height = 1
-)
+        self.pantalla_hora = tkinter.Label(
+            text = self.hora_total,
+            font = ("Radioland", 30),
+            foreground = "green",
+            background = "black",
+            width = 30,
+            height = 2
+        )
 
-pantalla_hora = tkinter.Label(
-    text = hora_total,
-    font = ("Radioland", 30),
-    foreground = "green",
-    background = "black",
-    width = 30,
-    height = 2
-)
+        self.mensaje_usuario = tkinter.Label(
+            textvariable = self.hora_alarma,
+            font = ("Courier", 16),
+            foreground = "black",
+            background = "cyan",
+            width = 70,
+            height = 0
+        )
 
-mensaje_usuario = tkinter.Label(
-    textvariable = hora_alarma,
-    font = ("Courier", 16),
-    foreground = "black",
-    background = "cyan",
-    width = 70,
-    height = 0
-)
+        self.boton1 = tkinter.Button(
+            text = "Poner Alarma",
+            font = ("Courier", 16),
+            width = 0,
+            height = 0,
+            bg = "red",
+            fg = "white",
+            command = self.on_click,
+            relief = "flat"
+        )
 
-boton1 = tkinter.Button(
-    text = "Poner Alarma",
-    font = ("Courier", 16),
-    width = 0,
-    height = 0,
-    bg = "red",
-    fg = "white",
-    command = on_click,
-    relief = "flat"
-)
+        self.mensaje_alarma = tkinter.Label(
+            text = "Introduzca la hora(hh:mm)",
+            font = ("Black", 22),
+            foreground = "white",
+            background = "black",
+            width = 30,
+            height = 2,
+            justify = "left"
+        )
 
-mensaje_alarma = tkinter.Label(
-    text = "Introduzca la hora(hh:mm)",
-    font = ("Black", 22),
-    foreground = "white",
-    background = "black",
-    width = 30,
-    height = 2,
-    justify = "left"
-)
+        self.input_alarma = tkinter.Entry(
+            fg = "black",
+            bg = "white",
+            font = ("Courier", 18),
+            width = 70,
+            justify = "center",
+            textvariable = self.entrada_hora
+        )
 
-input_alarma = tkinter.Entry(
-    fg = "black",
-    bg = "white",
-    font = ("Courier", 18),
-    width = 70,
-    justify = "center",
-    textvariable = entrada_hora
-)
+        self.mensaje_nombre = tkinter.Label(
+            text = "Introduzca nombre de alarma: ",
+            font = ("Black", 22),
+            foreground = "white",
+            background = "black",
+            width = 30,
+            height = 0,
+            justify = "left"
+        )
 
-mensaje_nombre = tkinter.Label(
-    text = "Introduzca nombre de alarma: ",
-    font = ("Black", 22),
-    foreground = "white",
-    background = "black",
-    width = 30,
-    height = 0,
-    justify = "left"
-)
+        self.input_nombre = tkinter.Entry(
+            fg = "black",
+            bg = "white",
+            font = ("Courier", 18),
+            width = 70,
+            justify = "center",
+            textvariable = self.entrada_nombre
+        )
 
-input_nombre = tkinter.Entry(
-    fg = "black",
-    bg = "white",
-    font = ("Courier", 18),
-    width = 70,
-    justify = "center",
-    textvariable = entrada_nombre
-)
-
-alarma_configurada =  tkinter.Label(
-    textvariable = entrada_nombre,
-    font = ("Courier", 16),
-    foreground = "black",
-    background = "green",
-    width = 70,
-    height = 0
-)
-
-boton_borrar = tkinter.Button(
-    (ventana), 
-    text="Borrar", 
-    command=click_fun
-)
+        self.alarma_configurada =  tkinter.Label(
+            textvariable = self.entrada_nombre,
+            font = ("Courier", 16),
+            foreground = "black",
+            background = "green",
+            width = 70,
+            height = 0
+        )
 
 
-# cajon_texto = tkinter.Text()
-
-def packear():
-
-    pantalla_hora.pack()
-    mensaje_inicial.pack()
-    mensaje_alarma.pack()
-    input_alarma.pack()
-    mensaje_nombre.pack()
-    input_nombre.pack()
-    mensaje_usuario.pack()
-    boton1.pack()
-    boton_borrar.pack()
+    def on_click(self):
+        datos_input_hora = self.entrada_hora.get()
+        datos_input_nombre = self.entrada_nombre.get()
+        return self.hora_alarma.set("Alarma: " + datos_input_nombre + "\n" + "configurada para: " + datos_input_hora)
     
-    
-    alarma_configurada.pack()
-    # cajon_texto.pack(fill=tkinter.BOTH, expand=True)
+    def obtener_hora_actual(self):
+        hora = strftime('%H')
+        minuto = strftime('%M')
+        segundo = strftime('%S')
+        hora_total = (hora + ':' + minuto + ':' + segundo)
 
-    ventana.mainloop()
+        return hora_total
+
+    def packear(self):
+
+        self.hora_alarma.set("Configurando... ")
+
+        self.pantalla_hora.pack()
+        self.mensaje_inicial.pack()
+        self.mensaje_alarma.pack()
+        self.input_alarma.pack()
+        self.mensaje_nombre.pack()
+        self.input_nombre.pack()
+        self.mensaje_usuario.pack()
+        self.boton1.pack()
+        
+        
+        self.alarma_configurada.pack()
+        
+
+        self.ventana.mainloop()
+    
+
 
 if __name__ == "__main__":
-    packear()
+    app = Interfaz()
+    app.packear()
