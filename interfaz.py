@@ -19,7 +19,8 @@ class Interfaz:
         self.createIfnterace()
         self.packear()
         self.actualizar_hora()
-        self.new_thread = Thread(target=self.task)
+
+        self.new_thread = Thread(target=self.task, daemon=True)
         self.new_thread.start()
 
         self.ventana.mainloop()
@@ -93,6 +94,7 @@ class Interfaz:
             **dict(
                 {
                     "text": "Poner Alarma",
+                    # "command": self.crear_modal,
                     "command": self.on_click,
                     "relief": "flat",
                 },
@@ -104,7 +106,7 @@ class Interfaz:
         self.mensaje_alarma = tkinter.Label(
             **dict(
                 {
-                    "text": "Introduzca la hora(hh:mm)",
+                    "text": "Introduzca la hora (hh:mm)",
                 },
                 **colors["base"],
                 **size["label"],
@@ -155,6 +157,33 @@ class Interfaz:
                 **fonts["normal"]
             )
         )
+
+    def destruir_modal(self):
+        self.pop.destroy()
+        self.pop.update()
+
+    def crear_modal(self):
+        self.pop = tkinter.Toplevel(self.ventana)
+        self.pop.title("Confirmation")
+        self.pop.geometry("300x150")
+        self.pop.config(bg=BASE_COLOR)
+        # Create a Label Text
+        label = tkinter.Label(
+            self.pop, text="Would You like to Proceed?", font=("Aerial", 12)
+        )
+        label.pack(pady=20)
+        # Add a Frame
+        frame = tkinter.Frame(self.pop, bg=BASE_COLOR)
+        frame.pack(pady=10)
+        # Add Button for making selection
+        button1 = tkinter.Button(
+            frame,
+            text="Cerrar",
+            command=self.destruir_modal,
+            bg="blue",
+            fg="white",
+        )
+        button1.grid(row=0, column=1)
 
     def on_click(self):
         datos_input_hora = self.entrada_hora.get()
