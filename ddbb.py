@@ -6,12 +6,16 @@ class DDBB:
 
     config = {
         'user': 'root',
-        'password': 'OjoCuidao',
+        'password': 'krono',
         'host': 'localhost',
         'port': 3306,
         'database': 'alarma',
         'raise_on_warnings': True
     }
+
+    def __init__(self, *args, **kwargs):
+        self.results = None
+        self.hora = '00:00'
 
     def execute_query(self, callback):
         try:
@@ -28,34 +32,32 @@ class DDBB:
         else:
             with cnx.cursor() as cursor:
                 callback(cursor)
+            cnx.commit()
             cnx.close()
 
     def query_alarmas(self, cursor):
-        
         cursor.execute("""
         SELECT id, hora FROM alarma;
         """)
+
         for (id, hora) in cursor:
             print(id, hora)
-            time.sleep(0.2)
+
 
     def listar_alarmas(self):
         self.execute_query(self.query_alarmas)
 
+    def query_insertar_alarma(self, cursor):
+        query = f"INSERT INTO `alarma`.`alarma` (`hora`) VALUES ('{self.hora}');"
+        datos = cursor.execute(query)
+
     def insertar_alarma(self, hora):
-        def insertar(cursor):
-            query = "INSERT INTO `alarma`.`alarma` (`id`, `hora`) VALUES ('4', '09:28');"
-            values = (hora,)
-            cursor.execute(query, values)
-
-        self.execute_query(insertar)
-        print("Alarma insertada correctamente.")
-
-
-
-
+        self.hora = hora
+        self.execute_query(self.query_insertar_alarma)
 
 if __name__ == "__main__":
+    from random import randint
+
     database = DDBB()
+    database.insertar_alarma(f"{randint(0,24)}:{randint(0,60)}")
     database.listar_alarmas()
-    database.insertar_alarma("21:14")
