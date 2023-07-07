@@ -31,7 +31,7 @@ class DDBB:
             cnx.close()
 
     def query_alarmas(self, cursor):
-        # Consulta para obtener todas las aulas y sus profesores
+        
         cursor.execute("""
         SELECT id, hora FROM alarma;
         """)
@@ -42,9 +42,20 @@ class DDBB:
     def listar_alarmas(self):
         self.execute_query(self.query_alarmas)
 
+    def insertar_alarma(self, hora):
+        def insertar(cursor):
+            query = "INSERT INTO `alarma`.`alarma` (`id`, `hora`) VALUES ('4', '09:28');"
+            values = (hora,)
+            cursor.execute(query, values)
 
-# INSERT INTO `alarma`.`alarma` (`hora`) VALUES ('14:00');
+        self.execute_query(insertar)
+        print("Alarma insertada correctamente.")
+
+
+
+
 
 if __name__ == "__main__":
     database = DDBB()
     database.listar_alarmas()
+    database.insertar_alarma("21:14")
