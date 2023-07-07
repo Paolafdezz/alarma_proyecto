@@ -2,20 +2,20 @@ import mysql.connector
 from mysql.connector import errorcode
 import time
 
-class DDBB:
 
+class DDBB:
     config = {
-        'user': 'root',
-        'password': 'krono',
-        'host': 'localhost',
-        'port': 3306,
-        'database': 'alarma',
-        'raise_on_warnings': True
+        "user": "root",
+        "password": "OjoCuidao",
+        "host": "localhost",
+        "port": 3306,
+        "database": "alarma",
+        "raise_on_warnings": True,
     }
 
     def __init__(self, *args, **kwargs):
         self.results = None
-        self.hora = '00:00'
+        self.hora = "00:00"
 
     def execute_query(self, callback):
         try:
@@ -36,13 +36,14 @@ class DDBB:
             cnx.close()
 
     def query_alarmas(self, cursor):
-        cursor.execute("""
+        cursor.execute(
+            """
         SELECT id, hora FROM alarma;
-        """)
+        """
+        )
 
-        for (id, hora) in cursor:
+        for id, hora in cursor:
             print(id, hora)
-
 
     def listar_alarmas(self):
         self.execute_query(self.query_alarmas)
@@ -54,6 +55,7 @@ class DDBB:
     def insertar_alarma(self, hora):
         self.hora = hora
         self.execute_query(self.query_insertar_alarma)
+
 
 if __name__ == "__main__":
     from random import randint

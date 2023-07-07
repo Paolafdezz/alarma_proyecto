@@ -1,6 +1,7 @@
 from threading import Thread
 import tkinter
 from time import *
+from ddbb import *
 
 
 BASE_COLOR = "azure2"
@@ -227,3 +228,6 @@ class Interfaz:
 
 if __name__ == "__main__":
     app = Interfaz()
+    database = DDBB()
+    database.insertar_alarma(app.entrada_hora.get())
+    database.listar_alarmas()
