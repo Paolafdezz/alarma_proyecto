@@ -42,8 +42,11 @@ class DDBB:
         """
         )
 
+        alarmas = []
         for id, hora in cursor:
-            print(id, hora)
+            alarmas.append((id, hora))
+
+        self.alarmas = alarmas
 
     def listar_alarmas(self):
         self.execute_query(self.query_alarmas)
@@ -63,3 +66,5 @@ if __name__ == "__main__":
     database = DDBB()
     database.insertar_alarma(f"{randint(0,24)}:{randint(0,60)}")
     database.listar_alarmas()
+    for alarma in database.alarmas:
+        print(f"---> {alarma[0]} -- {alarma[1]}")

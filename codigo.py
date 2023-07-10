@@ -4,7 +4,6 @@ import threading
 
 
 class Alarma:
-
     def __init__(self, hora_alarma):
         self.hora_alarma = hora_alarma
 
@@ -25,7 +24,7 @@ class Alarma:
 
     def posponer_alarma(self):
         print("La alarma se pospone 5 minutos.")
-        time.sleep(300)  
+        time.sleep(300)
         self.mostrar_mensaje()
 
     def detener_alarma(self):
@@ -43,7 +42,10 @@ class Alarma:
             while True:
                 hora_actual = time.localtime()
 
-                if hora_actual.tm_hour == hora_alarma.tm_hour and hora_actual.tm_min == hora_alarma.tm_min:
+                if (
+                    hora_actual.tm_hour == hora_alarma.tm_hour
+                    and hora_actual.tm_min == hora_alarma.tm_min
+                ):
                     self.mostrar_mensaje()
 
                     while True:
@@ -76,6 +78,7 @@ def demo():
 
     for thread in threads:
         thread.join()
+
 
 if __name__ == "__main__":
     demo()

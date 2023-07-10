@@ -20,10 +20,11 @@ class Interfaz:
         self.createIfnterace()
         self.packear()
         self.actualizar_hora()
+        self.database = DDBB()
+        self.database.listar_alarmas()
 
         self.new_thread = Thread(target=self.task, daemon=True)
         self.new_thread.start()
-
         self.ventana.mainloop()
 
     def createIfnterace(self):
@@ -65,7 +66,7 @@ class Interfaz:
                 },
                 **colors["base"],
                 **size["full"],
-                **fonts["big"]
+                **fonts["big"],
             )
         )
 
@@ -76,7 +77,7 @@ class Interfaz:
                 },
                 **colors["accent"],
                 **size["label"],
-                **fonts["big"]
+                **fonts["big"],
             )
         )
 
@@ -87,7 +88,7 @@ class Interfaz:
                 },
                 **colors["accent"],
                 **size["label"],
-                **fonts["normal"]
+                **fonts["normal"],
             )
         )
 
@@ -100,7 +101,7 @@ class Interfaz:
                     "relief": "flat",
                 },
                 **colors["action"],
-                **fonts["normal"]
+                **fonts["normal"],
             )
         )
 
@@ -111,7 +112,7 @@ class Interfaz:
                 },
                 **colors["base"],
                 **size["label"],
-                **fonts["normal"]
+                **fonts["normal"],
             )
         )
 
@@ -122,7 +123,7 @@ class Interfaz:
                 },
                 **colors["label"],
                 **size["full"],
-                **fonts["normal"]
+                **fonts["normal"],
             )
         )
 
@@ -133,7 +134,7 @@ class Interfaz:
                 },
                 **colors["base"],
                 **size["label"],
-                **fonts["normal"]
+                **fonts["normal"],
             )
         )
 
@@ -144,7 +145,7 @@ class Interfaz:
                 },
                 **colors["label"],
                 **size["full"],
-                **fonts["normal"]
+                **fonts["normal"],
             )
         )
 
@@ -155,7 +156,7 @@ class Interfaz:
                 },
                 **colors["accent"],
                 **size["full"],
-                **fonts["normal"]
+                **fonts["normal"],
             )
         )
 
@@ -189,6 +190,13 @@ class Interfaz:
     def on_click(self):
         datos_input_hora = self.entrada_hora.get()
         datos_input_nombre = self.entrada_nombre.get()
+
+        self.database.insertar_alarma(datos_input_hora)
+
+        self.database.listar_alarmas()
+        for alarma in self.database.alarmas:
+            print(f"---> {alarma[0]} -- {alarma[1]}")
+
         return self.hora_alarma.set(
             "Alarma: "
             + datos_input_nombre
@@ -228,6 +236,3 @@ class Interfaz:
 
 if __name__ == "__main__":
     app = Interfaz()
-    database = DDBB()
-    database.insertar_alarma(app.entrada_hora.get())
-    database.listar_alarmas()
